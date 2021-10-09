@@ -10,10 +10,14 @@ And more! This list is quite vulnerable to growth, so please contribute by filin
 
 ## Development :computer:
 After forking and/or cloning this repository, in the repository's topmost directory:
-1. Create a Python virtual environment in the directory 
+1. Create a Python virtual environment in the directory
+
 `python -m venv .`
+
 2. Install required packages using `pip`
+
 `pip install -r requirements.txt`
+
 3. Create a `.env` file to set up the necessary environment variables (ask an admin for the values)
 ```
 SLACK_BOT_TOKEN=<VALUE>
@@ -23,6 +27,7 @@ PORT=<VALUE>
 4. Set up a webhook/event receiver using `ngrok` or use a server on the same port as in `.env`
 5. Ensure your Slack app configuration (manifest, scopes, etc.) is correct at api.slack.com/apps
 5. Run the Slack bot!
+
 `python main.py`
 
 ### Helpful Resources
