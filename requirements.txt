@@ -1,3 +1,2 @@
-slackeventsapi
-slack_sdk
+slack_bolt
 python-dotenv

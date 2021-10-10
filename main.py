@@ -1,28 +1,45 @@
-from slackeventsapi import SlackEventAdapter
-from slack_sdk.web import WebClient
 from dotenv import load_dotenv
 import os
 
+from slack_bolt import App
+from slack_bolt.adapter.socket_mode import SocketModeHandler
+
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
 load_dotenv()
 
-slack_signing_secret = os.environ.get("SLACK_SIGNING_SECRET")
-slack_events_adapter = SlackEventAdapter(slack_signing_secret, "/slack/events")
+app = App(
+    token=os.environ.get("SLACK_BOT_TOKEN"),
+    signing_secret=os.environ.get("SLACK_SIGNING_SECRET")
+)
 
-slack_bot_token = os.environ.get("SLACK_BOT_TOKEN")
-slack_client = WebClient(slack_bot_token)
+client = app.client
 
-@slack_events_adapter.on("app_mention")
-def handle_mentions(data):
-    event = data["event"]
-    user = event["user"]
-    slack_client.chat_postMessage(
-        channel = event["channel"],
-        thread_ts = event["ts"],
-        text = f"Greetings, <@{user}>! :wave:"
+def send_message(conversation_id, message):
+    client.chat_postMessage(
+        channel=conversation_id,
+        text=message
     )
 
-@slack_events_adapter.on("error")
-def error_handler(err):
-    print("ERROR: " + str(err))
+def get_conversation_id(channel_name):
+    conversation_id = None
+    for response in client.conversations_list():
+        if(conversation_id is not None):
+            break
+        for channel in response["channels"]:
+            if(channel["name"] == channel_name):
+                conversation_id = channel["id"]
+                break
+    return conversation_id
 
-slack_events_adapter.start(port=os.environ.get("PORT"))
+@app.event("app_mention")
+def mention_handler(body, say):
+    event = body["event"]
+    conversation_id = event["channel"]
+    say("Hi :)")
+    send_message(conversation_id, "It works!")
+
+if __name__ == "__main__":
+    SocketModeHandler(app, os.environ.get("SLACK_APP_TOKEN")).start()

@@ -22,15 +22,14 @@ After forking and/or cloning this repository, in the repository's topmost direct
 ```
 SLACK_BOT_TOKEN=<VALUE>
 SLACK_SIGNING_SECRET=<VALUE>
-PORT=<VALUE>
+SLACK_APP_TOKEN=<VALUE>
 ```
-4. Set up a webhook/event receiver using `ngrok` or use a server on the same port as in `.env`
-5. Ensure your Slack app configuration (manifest, scopes, etc.) is correct at api.slack.com/apps
+4. Ensure your Slack app configuration (manifest, scopes, etc.) is correct at api.slack.com/apps
 5. Run the Slack bot!
 
 `python main.py`
 
 ### Helpful Resources
-- https://github.com/slackapi/python-slack-events-api
 - https://api.slack.com/methods
 - https://api.slack.com/events
+- https://api.slack.com/apis/connections/socket
